@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 # Cofigurar opciones de Chrome
 chrome_options = Options()
-# chrome_options.add_argument("--headless") #Ejecutar en segundo plano
+chrome_options.add_argument("--headless") #Ejecutar en segundo plano
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--window-size=1920,1080")
 
@@ -68,13 +68,48 @@ try:
         cols = row.find_elements(By.TAG_NAME, "td")
         if len(cols) >= 5:
             try:
-                date_str = [0].text
+                date_str = cols[0].text
                 close_price = float(cols[4].text.replace(",", ""))
                 
                 dates.append(datetime.strptime(date_str, "%b %d, %Y"))
                 closes.append(close_price)
             except:
                 continue
+            
+    # Crear Dataframe con los datos
+    df = pd.DataFrame({"Data": dates, "Close": closes})
+    df = df.sort_values("Data") # Ordenar por fecha
+    
+    # Crear visualizaciones
+    plt.style.use("default")
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
+    
+    # Grafica de linea de precios de cierre
+    ax1.plot(df["Data"], df["Close"], color="#2E86AB", linewidth=2)
+    ax1.set_title(f'S&P 500 - Precios de cierre (6 meses)\nPrecio actual: {current_price} ({price_change})', fontsize=14, fontweight='bold')
+    ax1.set_ylabel("precio(USD)")
+    ax1.grid(True, alpha=0.3)
+    ax1.tick_params(axis="x", rotation=45)
+    
+    # Grafica de barras de variacion diario
+    daily_change = df["Close"].pct_change() * 100
+    colors = ["green" if x >= 0 else "red" for x in daily_change]
+    ax2.bar(df["Data"], daily_change, color=colors, alpha=0.7)
+    ax2.set_title("Variacion porcentual diaria", fontsize=14, fontweight='bold')
+    ax2.set_ylabel('Cambio (%)')
+    ax2.grid(True, alpha=0.3)
+    ax2.tick_params(axis='x', rotation=45)
+    
+    # Ajustar layout y mostrar
+    plt.tight_layout()
+    plt.show()
+    
+    # Mostrar estadísticas básicas
+    print(f"Precio actual del S&P 500: {current_price}")
+    print(f"Cambio: {price_change}")
+    print(f"Precio más alto (6 meses): ${df['Close'].max():.2f}")
+    print(f"Precio más bajo (6 meses): ${df['Close'].min():.2f}")
+    print(f"Volatilidad promedio: {daily_change.std():.2f}%")
     
 finally:
     # Cerrar el navegador
