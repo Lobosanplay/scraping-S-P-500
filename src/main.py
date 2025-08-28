@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 # Cofigurar opciones de Chrome
 chrome_options = Options()
-chrome_options.add_argument("--headless") #Ejecutar en segundo plano
+# chrome_options.add_argument("--headless") #Ejecutar en segundo plano
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--window-size=1920,1080")
 
@@ -43,14 +43,19 @@ try:
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[data-testid='history-table']"))
     )
     
+    # Botom de las opciones de cambio de tiempo
+    time_period_options = driver.find_element(By.CSS_SELECTOR, "button[title='Aug 28, 2024 - Aug 28, 2025']")
+    time_period_options.click()
+    time.sleep(2)
+    
     # Cambiar el rango de tiempo de 6 meses
-    time_period_buttom = driver.find_element(By.XPATH, "//button[@value()='6mo']")
+    time_period_buttom = driver.find_element(By.CSS_SELECTOR, "button[value='6_M']")
     time_period_buttom.click()
     time.sleep(2) # Esperar a que carguen los datos
     
     # Extraer datos de la tabla
-    tabla = driver.find_element(By.CSS_SELECTOR, "table[data-test='historical-prices']")
-    rows = tabla.find_element(By.TAG_NAME, "tr")
+    tabla = driver.find_element(By.CSS_SELECTOR, "table[class='table yf-1jecxey noDl hideOnPrint']")
+    rows = tabla.find_elements(By.TAG_NAME, "tr")
     
     # Procesar los datos
     dates = []
@@ -70,9 +75,7 @@ try:
                 closes.append(close_price)
             except:
                 continue
-            
-    print(dates)
-    print(closes)
+    
 finally:
     # Cerrar el navegador
     driver.quit()
