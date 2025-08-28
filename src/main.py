@@ -36,15 +36,15 @@ try:
     price_change = change_element.text
     
     # Navegar a la pestaña de datos historicos
-    driver.find_element(By.XPATH, "//span[text()='Historical Data']").click()
-    
+    driver.find_element(By.XPATH, "//span[contains(text(), 'Historical Data')]").click()
+
     # Esperar a que carguen los datos historicos
     WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.CSS_SELECTOR, "table[data-test='historical-prices']"))
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[data-testid='history-table']"))
     )
     
     # Cambiar el rango de tiempo de 6 meses
-    time_period_buttom = driver.find_element(By.XPATH, "//span[text()='6mo']")
+    time_period_buttom = driver.find_element(By.XPATH, "//button[@value()='6mo']")
     time_period_buttom.click()
     time.sleep(2) # Esperar a que carguen los datos
     
