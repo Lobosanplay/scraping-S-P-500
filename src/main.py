@@ -44,7 +44,7 @@ try:
     )
     
     # Botom de las opciones de cambio de tiempo
-    time_period_options = driver.find_element(By.CSS_SELECTOR, "button[title='Aug 28, 2024 - Aug 28, 2025']")
+    time_period_options = driver.find_element(By.CSS_SELECTOR, "button[class='tertiary-btn fin-size-small menuBtn rounded yf-3zn7qw']")
     time_period_options.click()
     time.sleep(2)
     
@@ -102,7 +102,7 @@ try:
     
     # Ajustar layout y mostrar
     plt.tight_layout()
-    plt.show()
+    plt.savefig("output_data/resultados_datos.jpg")
     
     # Mostrar estadísticas básicas
     print(f"Precio actual del S&P 500: {current_price}")
