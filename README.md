@@ -31,6 +31,8 @@ pip install selenium pandas matplotlib
 
 ```
 scraping-S&P-500/
+├── output_data/
+|   └── result.png       # Resultado de las graficas
 ├── src/
 │   └── main.py          # Script principal de scraping y visualización
 ├── requirements.txt     # Dependencias del proyecto
@@ -104,6 +106,12 @@ Cambio: +25.50 (+0.56%)
 Precio más alto (6 meses): $4,589.12
 Precio más bajo (6 meses): $4,102.45
 Volatilidad promedio: 0.85%
+```
+
+Resultados de las graficas se guardan en esta carpeta
+```
+├── output_data/
+    └── result.png       # Resultado de las graficas
 ```
 
 ## 🎨 Personalización
